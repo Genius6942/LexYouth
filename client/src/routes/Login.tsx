@@ -1,17 +1,22 @@
-import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Link,
+  Grid,
+  Box,
+  createTheme,
+  ThemeProvider,
+  Typography,
+  Container,
+} from "@mui/material";
+import { LockOutlined } from "@mui/icons-material";
+import useAuth from "../lib/auth";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 function Copyright(props: any) {
   return (
@@ -34,13 +39,25 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function Login() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const { ajax, setToken, authenticated, token } = useAuth();
+  const navigate = useNavigate();
+  useEffect(() => {
+    authenticated() && navigate("/");
+  }, [token]);
+  if (authenticated()) navigate("/");
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    try {
+      const result = await ajax("/auth", {
+        username: data.get("username"),
+        password: data.get("password"),
+      });
+      if (result.success) setToken(result.access_token);
+      else alert(result.msg);
+    } catch (e: any) {
+      console.error(e.stack);
+    }
   };
 
   return (
@@ -56,7 +73,7 @@ export default function Login() {
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
+            <LockOutlined />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign in
@@ -71,10 +88,10 @@ export default function Login() {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="username"
+              label="Username"
+              name="username"
+              autoComplete="username"
               autoFocus
             />
             <TextField
