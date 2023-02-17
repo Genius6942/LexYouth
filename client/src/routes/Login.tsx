@@ -39,7 +39,7 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function Login() {
-  const { ajax, setToken, authenticated, token } = useAuth();
+  const { ajax, login, authenticated, token } = useAuth();
   const navigate = useNavigate();
   useEffect(() => {
     authenticated() && navigate("/");
@@ -53,7 +53,7 @@ export default function Login() {
         username: data.get("username"),
         password: data.get("password"),
       });
-      if (result.success) setToken(result.access_token);
+      if (result.success) login(result.access_token);
       else alert(result.msg);
     } catch (e: any) {
       console.error(e.stack);

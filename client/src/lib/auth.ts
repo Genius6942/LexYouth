@@ -64,11 +64,11 @@ function useAuth() {
   };
 
   return {
-    setToken: saveToken,
+    login: saveToken,
     request,
     ajax, // this is the function you should normally be using
     token,
-    removeToken,
+    logout: removeToken,
     authenticated: () => {
       return token && token.length > 0;
     },
