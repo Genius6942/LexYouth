@@ -5,12 +5,12 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  Tab,
-  Tabs,
-  Toolbar,
   Typography,
   useTheme,
+  Tab,
+  Tabs,
 } from "@mui/material";
+import { TabContext, TabPanel } from "@mui/lab";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../../lib/auth";
@@ -25,7 +25,7 @@ export default function TeacherDashboard() {
   const theme = useTheme();
   const { toggleColorMode } = useColorMode();
 
-  const [selectedTab, setSelectedTab] = useState(0);
+  const [selectedTab, setSelectedTab] = useState("students");
   const sideWidths = 300;
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -37,76 +37,77 @@ export default function TeacherDashboard() {
     setAnchorEl(null);
   };
   return (
-    <Box sx={{ display: "flex", flexDirection: "column" }}>
-      <AppBar
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          bgcolor: "background.paper",
-          alignItems: "center",
-          px: 3,
-        }}
-      >
-        {/* <Toolbar
+    <TabContext value={selectedTab}>
+      <Box sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+        <AppBar
           sx={{
+            display: "flex",
+            flexDirection: "row",
             bgcolor: "background.paper",
-            display: "flex",
-            height: "48px !important",
-            minHeight: 0,
-          }}
-        > */}
-        <Box sx={{ width: sideWidths }}>
-          <Typography variant="h6" whiteSpace="nowrap" color="text.secondary">
-            Teacher dashboard
-          </Typography>
-        </Box>
-        <Box sx={{ flexGrow: 1 }}>
-          <Tabs
-            value={selectedTab}
-            onChange={(_, newValue) => setSelectedTab(newValue)}
-            centered
-          >
-            <Tab label="Item One" />
-            <Tab label="Item Two" />
-            <Tab label="Item Three" />
-          </Tabs>
-        </Box>
-        <Box
-          sx={{
-            width: sideWidths,
-            display: "flex",
             alignItems: "center",
-            justifyContent: "flex-end",
+            px: 3,
           }}
         >
-          <IconButton onClick={() => toggleColorMode()}>
-            {theme.palette.mode === "dark" ? <LightMode /> : <DarkMode />}
-          </IconButton>
-          <IconButton onClick={handleMenu} size="large">
-            <AccountCircle />
-          </IconButton>
-          <Menu
-            id="menu-appbar"
-            anchorEl={anchorEl}
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "right",
+          <Box sx={{ width: sideWidths }}>
+            <Typography variant="h6" whiteSpace="nowrap" color="text.secondary">
+              Teacher dashboard
+            </Typography>
+          </Box>
+          <Box sx={{ flexGrow: 1 }}>
+            <Tabs
+              value={selectedTab}
+              onChange={(_, newValue) => setSelectedTab(newValue)}
+              centered
+            >
+              <Tab label="Students" value="students" />
+              <Tab label="Item Two" value="2" />
+              <Tab label="Item Three" value="3" />
+            </Tabs>
+          </Box>
+          <Box
+            sx={{
+              width: sideWidths,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
             }}
-            keepMounted
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
           >
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem onClick={handleClose}>My account</MenuItem>
-          </Menu>
-        </Box>
-        {/* </Toolbar> */}
-      </AppBar>
-      <Box sx={{ flexGrow: 1, overflow: "auto" }}>hi</Box>
-    </Box>
+            <IconButton onClick={() => toggleColorMode()}>
+              {theme.palette.mode === "dark" ? <LightMode /> : <DarkMode />}
+            </IconButton>
+            <IconButton onClick={handleMenu} size="large">
+              <AccountCircle />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={handleClose}>Profile</MenuItem>
+              <MenuItem onClick={handleClose}>My account</MenuItem>
+            </Menu>
+          </Box>
+        </AppBar>
+        <TabPanel sx={{ flexGrow: 1, pt: 10 }} value="students">
+          Item One
+        </TabPanel>
+        <TabPanel sx={{ flexGrow: 1 }} value="2">
+          Item Two
+        </TabPanel>
+        <TabPanel sx={{ flexGrow: 1 }} value="3">
+          Item Three
+        </TabPanel>
+      </Box>
+    </TabContext>
   );
 }

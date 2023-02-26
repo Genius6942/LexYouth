@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <>
       <div>welcome home.</div>
-      {authenticated() ? (
+      {!authenticated() ? (
         <Link to="login">Log In</Link>
       ) : (
         <Button onClick={() => logout()} variant="contained">
