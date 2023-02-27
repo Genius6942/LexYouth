@@ -9,10 +9,11 @@ import {
   useTheme,
   Tab,
   Tabs,
+  Container,
 } from "@mui/material";
 import { TabContext, TabPanel } from "@mui/lab";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import useAuth from "../../../lib/auth";
 import { useColorMode } from "../../../ThemeWraper";
 
@@ -98,15 +99,9 @@ export default function TeacherDashboard() {
             </Menu>
           </Box>
         </AppBar>
-        <TabPanel sx={{ flexGrow: 1, pt: 10 }} value="students">
-          Item One
-        </TabPanel>
-        <TabPanel sx={{ flexGrow: 1 }} value="2">
-          Item Two
-        </TabPanel>
-        <TabPanel sx={{ flexGrow: 1 }} value="3">
-          Item Three
-        </TabPanel>
+      <Box sx={{ flexGrow: 1, pt: 10 }} >
+          <Outlet/>
+        </Box>
       </Box>
     </TabContext>
   );
